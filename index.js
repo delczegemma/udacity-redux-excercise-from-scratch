@@ -1,3 +1,16 @@
+//The Reducer function is responsible to updating the state based on the current action
+//It takes alwas to arguments, the "state" and the "action"
+//This has to be a pure function to increase predictability.
+//So the function doesn't modify the current, instead with the concat() method it creates a new one,
+// in order to remain pure.
+
+function todos(state = [], action) {
+	if(action.type === 'ADD_TODO') {
+		return state.concat([action.todo])
+	}
+	return state
+}
+
 function createStore() {
 	//The store should have four parts
 	//1. the state
