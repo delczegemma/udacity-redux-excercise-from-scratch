@@ -4,7 +4,7 @@ function createStore(reducer) {
 	//The store should have four parts
 	//1. the state
 	//2. Get the state
-	//3. Listen to stat changes
+	//3. Listen to state changes
 	//4. Update the state
 
 	let state
@@ -41,12 +41,20 @@ function createStore(reducer) {
 //So the function doesn't modify the current, instead with the concat() method it creates a new one,
 // in order to remain pure.
 function todos(state = [], action) {
-	if(action.type === 'ADD_TODO') {
-		return state.concat([action.todo])
+	switch (action.type){
+		case 'ADD_TODO' :
+			return state.concat([action.todo])
+		case 'REMOVE_TODO' :
+			return state.filer((todo) => todo.id !== action.id)
+		case 'TOGGLE_TODO' :
+			return state.map((todo) => todo.id !== action.id ? todo :
+				Object.assign({}, todo, { complete: !todo.complete }))
+		default: 
+			return state
 	}
-	return state
 }
 
+//createStore() must be passed a "reducer" function, when it's invoked.
 const store = createStore(todos)
 
 store.subscribe(() => {
