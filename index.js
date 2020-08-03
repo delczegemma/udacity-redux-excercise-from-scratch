@@ -65,8 +65,17 @@ function goals (state = [], action) {
 	}
 }
 
+//-Root Reducer-//
+function app(state = {}, action){
+	return {
+		//The reducer functions just managing the specific slice of the the state now
+		todo: {todos(state.todos, action)},
+		goal: {goals(state.goals, action)},
+	}
+}
+
 //createStore() must be passed a "reducer" function, when it's invoked.
-const store = createStore(todos)
+const store = createStore(app)
 
 store.subscribe(() => {
 	console.log('The new state is: ', store.getState())
