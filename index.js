@@ -21,7 +21,7 @@ function createStore(reducer) {
 
 	//Store dispatch function to update state inside the store (part 4)
 	const dispatch = (action) => {
-		state = reducer(state,action)
+		state = reducer(state, action)
 		listeners.forEach((listener) =>listener())
 	}
 
@@ -45,7 +45,7 @@ function todos(state = [], action) {
 		case 'ADD_TODO' :
 			return state.concat([action.todo])
 		case 'REMOVE_TODO' :
-			return state.filer((todo) => todo.id !== action.id)
+			return state.filter((todo) => todo.id !== action.id)
 		case 'TOGGLE_TODO' :
 			return state.map((todo) => todo.id !== action.id ? todo :
 				Object.assign({}, todo, { complete: !todo.complete }))
@@ -59,7 +59,7 @@ function goals (state = [], action) {
 		case 'ADD_GOAL' :
 			return state.concat([action.goal])
 		case 'REMOVE_GOAL' :
-			return state.filer((goal) => goal.id !== action.id)
+			return state.filter((goal) => goal.id !== action.id)
 		default :
 			return state
 	}
@@ -69,8 +69,8 @@ function goals (state = [], action) {
 function app(state = {}, action){
 	return {
 		//The reducer functions just managing the specific slice of the the state now
-		todo: {todos(state.todos, action)},
-		goal: {goals(state.goals, action)},
+		todos: todos(state.todos, action),
+		goals: goals(state.goals, action),
 	}
 }
 
@@ -82,10 +82,59 @@ store.subscribe(() => {
 })
 
 store.dispatch({
-	type: 'ADD_TODO',
-	todo:{
-		id:0,
-		name: 'Learn Redux',
-		complete: false
-	}
+  type: 'ADD_TODO',
+  todo: {
+    id: 0,
+    name: 'Walk the dog',
+    complete: false,
+  }
+})
+
+store.dispatch({
+  type: 'ADD_TODO',
+  todo: {
+    id: 1,
+    name: 'Wash the car',
+    complete: false,
+  }
+})
+
+store.dispatch({
+  type: 'ADD_TODO',
+  todo: {
+    id: 2,
+    name: 'Go to the gym',
+    complete: true,
+  }
+})
+
+store.dispatch({
+  type: 'REMOVE_TODO',
+  id: 1
+})
+
+store.dispatch({
+  type: 'TOGGLE_TODO',
+  id: 0
+})
+
+store.dispatch({
+  type: 'ADD_GOAL',
+  goal: {
+    id: 0,
+    name: 'Learn Redux'
+  }
+})
+
+store.dispatch({
+  type: 'ADD_GOAL',
+  goal: {
+    id: 1,
+    name: 'Lose 20 pounds'
+  }
+})
+
+store.dispatch({
+  type: 'REMOVE_GOAL',
+  id: 0
 })
