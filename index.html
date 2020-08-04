@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Udacity Todos Goals</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
 </head>
 <body>
 	<div>
@@ -23,40 +24,6 @@
 			return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36)
 		}
 
-					// ---* Library Code *---//
-
-		function createStore(reducer) {
-			//The store should have four parts
-			//1. the state
-			//2. Get the state
-			//3. Listen to state changes
-			//4. Update the state
-
-			let state
-			let listeners = []
-
-			const getState = () => state
-
-			const subscribe = (listener) => {
-				listeners.push(listener)
-				return () => {
-					listeners = listeners.filter((l) => l !== listener)
-				}
-			}
-
-			//Store dispatch function to update state inside the store (part 4)
-			const dispatch = (action) => {
-				state = reducer(state, action)
-				listeners.forEach((listener) =>listener())
-			}
-
-			return {
-				getState,
-				subscribe,
-				dispatch
-			}
-
-		}
 
 		// ---* App Code *---//
 
@@ -136,17 +103,12 @@
 			}
 		}
 
-		//-Root Reducer-//
-		function app(state = {}, action){
-			return {
-				//The reducer functions just managing the specific slice of the the state now
-				todos: todos(state.todos, action),
-				goals: goals(state.goals, action),
-			}
-		}
 
 		//createStore() must be passed a "reducer" function, when it's invoked.
-		const store = createStore(app)
+		const store = Redux.createStore(Redux.combineReducers({
+			todos,
+			goals,
+		}))
 
 		store.subscribe(() => {
 			const { goals, todos } = store.getState()
