@@ -223,11 +223,14 @@
 			
 		}
 
+
+
 		document.getElementById('todoBtn')
 			.addEventListener('click', AddTodo)
 
 		document.getElementById('goalBtn')
 			.addEventListener('click', AddGoal)
+		
 
 		function addTodotoDOM (todo) {
 			const node = document.createElement('li')
@@ -236,6 +239,11 @@
 
 			document.getElementById('todos')
 				.appendChild(node)
+
+			node.style.textDecoration = todo.complete ? 'line-through' : 'none'
+			node.addEventListener('click', () => {
+				store.dispatch(toggleTodoAction(todo.id))
+			})
 		}
 
 		function addGoaltoDOM (goal) {
