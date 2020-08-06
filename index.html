@@ -28,7 +28,7 @@
 		// ---* App Code *---//
 
 
-		//Pefer constants than strings as the values of type properties. 
+		//Prefer constants than strings as the values of type properties. 
 		//Both work  -- but when using constants, the console with throw an error rather than fail silently
 		//should be any misspellings
 		const ADD_TODO = 'ADD_TODO'
@@ -103,6 +103,7 @@
 			}
 		}
 
+		//Middlware functions - hihgher order functions
 		const checker = (store) => (next) => (action) => {
 			if (
 				action.type === ADD_TODO &&
@@ -119,11 +120,20 @@
 			return next(action)
 		}
 
+		const logger = (store) => (next) => (action) => {
+			console.group(action.type)
+				console.log('The action: ', action)
+				const result = next(action)
+				console.log('The new state: ', store.getState())
+			console.groupEnd()
+			return result
+		}
+
 		//createStore() must be passed a "reducer" function, when it's invoked.
 		const store = Redux.createStore(Redux.combineReducers({
 			todos,
 			goals,
-		}), Redux.applyMiddleware(checker))
+		}), Redux.applyMiddleware(checker, logger))
 
 		store.subscribe(() => {
 			const { goals, todos } = store.getState()
