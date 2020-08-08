@@ -108,6 +108,15 @@
 			}
 		}
 
+		function loading (state = true, action) {
+			switch(action.type){
+				case RECEIVE_DATA :
+					return false
+				default : 
+					return state
+			}
+		}
+
 		//Middlware functions - hihgher order functions
 		const checker = (store) => (next) => (action) => {
 			if (
@@ -138,6 +147,7 @@
 		const store = Redux.createStore(Redux.combineReducers({
 			todos,
 			goals,
+			loading,
 		}), Redux.applyMiddleware(checker, logger))
 
 	</script>
@@ -253,7 +263,12 @@
 			}
 			render(){
 				const { store } =this.props
-				const { todos, goals } = store.getState()
+				const { todos, goals, loading } = store.getState()
+
+				if (loading === true) {
+					return <h3>Loading</h3>
+				}
+
 				return(
 					<div>
 						<Todos todos={todos} store={this.props.store} />
